@@ -1,0 +1,22 @@
+services:
+  db:
+    container_name: ticket-db
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATA: /data/postgres
+    networks:
+      - db_net
+    volumes:
+      - db_volume:/data/postgres
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+networks:
+  db_net:
+    driver: bridge
+volumes:
+  db_volume:
