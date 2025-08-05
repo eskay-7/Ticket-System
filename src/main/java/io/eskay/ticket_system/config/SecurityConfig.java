@@ -49,6 +49,7 @@ public class SecurityConfig {
                 .exceptionHandling(handler -> handler.accessDeniedHandler(accessDeniedHandler()))
                 .authorizeHttpRequests(req -> req
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/categories").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
