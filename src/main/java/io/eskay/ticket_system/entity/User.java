@@ -3,12 +3,16 @@ package io.eskay.ticket_system.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
 
 @Builder
+@Getter
+@Setter
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
