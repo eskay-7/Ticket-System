@@ -1,26 +1,30 @@
 package io.eskay.ticket_system;
 
-import io.eskay.ticket_system.entity.Role;
-import io.eskay.ticket_system.entity.User;
-import io.eskay.ticket_system.repository.UserRepository;
+import io.eskay.ticket_system.entity.Category;
+import io.eskay.ticket_system.repository.*;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashSet;
+import java.util.List;
 
 @SpringBootApplication
 @RestController
 public class TicketSystemApplication {
 
+    private final CategoryRepository categoryRepository;
+
+    public TicketSystemApplication(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
+
     public static void main(String[] args) {
         SpringApplication.run(TicketSystemApplication.class, args);
     }
 
-    @GetMapping("/")
-    public String welcome() {
-        return "Welcome";
+    @GetMapping("/api/categories")
+    public List<Category> welcome() {
+        return categoryRepository.findAll();
     }
 }
