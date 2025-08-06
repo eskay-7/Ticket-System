@@ -1,7 +1,9 @@
 package io.eskay.ticket_system.controller;
 
+import io.eskay.ticket_system.dto.request.CreateCommentRequest;
 import io.eskay.ticket_system.dto.request.CreateTicketRequest;
 import io.eskay.ticket_system.dto.request.UpdateTicketRequest;
+import io.eskay.ticket_system.dto.response.CommentDto;
 import io.eskay.ticket_system.dto.response.TicketDto;
 import io.eskay.ticket_system.service.TicketService;
 import jakarta.validation.Valid;
@@ -51,5 +53,19 @@ public class TicketController {
     public ResponseEntity<?> deleteTicket(@PathVariable Long id) {
         ticketService.deleteTicket(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("{ticket_id}/comments")
+    public List<CommentDto> getTicketComments(@PathVariable("ticket_id") Long ticketId) {
+        return ticketService.getTicketComments(ticketId);
+    }
+
+    @PostMapping("{ticket_id}/comments")
+    public ResponseEntity<CommentDto> addComment(
+            @PathVariable("ticket_id") Long ticketId,
+            @RequestBody @Valid CreateCommentRequest request
+    ) {
+        var createdTicket = ticketService.addComment(ticketId, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdTicket);
     }
 }
