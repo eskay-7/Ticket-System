@@ -24,3 +24,9 @@ jwt:
       time: ${JWT_REFRESH_EXPIRATION_TIME}
   secret:
     key: ${JWT_ SECRET_KEY}
+
+ngRok:
+  url: ${NGROK_URL}
+#springdoc:
+#  swagger-ui:
+#    config-url: https://28a654e177bd.ngrok-free.app/swagger-ui/index.html#
