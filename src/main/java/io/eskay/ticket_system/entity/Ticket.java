@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SourceType;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
@@ -36,13 +37,17 @@ public class Ticket {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @UpdateTimestamp
+    @UpdateTimestamp(source = SourceType.DB)
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "team_id")
+    private Team team;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "priority")
@@ -63,8 +68,22 @@ public class Ticket {
     @Column(name = "status")
     private TicketStatus status;
 
-    @OneToMany(mappedBy = "ticket", fetch = FetchType.LAZY)
+    @OneToMany(
+            mappedBy = "ticket",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     @Builder.Default
     private List<TicketComment> ticketComments =
             new ArrayList<>();
+
+    public void addComment(TicketComment comment) {
+        ticketComments.add(comment);
+        comment.setTicket(this);
+    }
+
+    public void assignedToAgent(User agent) {
+        this.assignedTo = agent;
+        this.status = TicketStatus.OPEN;
+    }
 }

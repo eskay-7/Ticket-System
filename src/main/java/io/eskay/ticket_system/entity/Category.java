@@ -25,4 +25,11 @@ public class Category {
     @JoinColumn(name = "default_team_id")
     private Team defaultTeam;
 
+    public Category() {}
+
+    public Category(String name, Team defaultTeam) {
+        this.name = name;
+        this.defaultTeam = defaultTeam;
+    }
+
 }
