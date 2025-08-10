@@ -2,8 +2,10 @@ package io.eskay.ticket_system.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -21,4 +23,7 @@ public class Team {
     @JoinColumn(name = "team_lead_id")
     private User teamLead;
 
+    public Team(String name) {
+        this.name = name;
+    }
 }
