@@ -30,6 +30,18 @@ public class GlobalExceptionHandling {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 
+    @ExceptionHandler(ForbiddenOperationException.class)
+    public ResponseEntity<ExceptionResponse> handleException (ForbiddenOperationException e) {
+        var error = new ExceptionResponse(
+                HttpStatusCode.valueOf(403).value(),
+                HttpStatus.FORBIDDEN,
+                e.getMessage(),
+                Timestamp.valueOf(LocalDateTime.now())
+        );
+
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(error);
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ExceptionResponse> handleException (IllegalArgumentException e) {
         var error = new ExceptionResponse(

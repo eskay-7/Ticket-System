@@ -48,8 +48,10 @@ public class SecurityConfig {
                 .exceptionHandling(handler -> handler.authenticationEntryPoint(authenticationEntryPoint()))
                 .exceptionHandling(handler -> handler.accessDeniedHandler(accessDeniedHandler()))
                 .authorizeHttpRequests(req -> req
+                        .requestMatchers("/api/info/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/categories").permitAll()
+                        .requestMatchers("/api/tickets/**").hasAnyRole("USER","AGENT","ADMIN")
+                        .requestMatchers("/api/agents/**").hasRole("AGENT")
                         .requestMatchers("/swagger-ui/**", "/swagger-resources/**",
                                 "/v3/api-docs/**", "/swagger-ui.html").permitAll()
                         .anyRequest().authenticated())

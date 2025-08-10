@@ -2,6 +2,7 @@ package io.eskay.ticket_system.mapper;
 
 import io.eskay.ticket_system.dto.response.TicketDto;
 import io.eskay.ticket_system.entity.Ticket;
+import io.eskay.ticket_system.entity.User;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
@@ -20,20 +21,20 @@ public class TicketDtoMapper implements Function<Ticket, TicketDto> {
                 ticket.getCategory().getName(),
                 checkPriority(ticket),
                 ticket.getStatus().name(),
-                ticket.getRaisedBy().getId().toString(),
-                checkAssignedTo(ticket)
+                getUserFullName(ticket.getRaisedBy()),
+                getUserFullName(ticket.getAssignedTo())
         );
-    }
-
-    private String checkAssignedTo(Ticket ticket) {
-        if (ticket.getAssignedTo() == null)
-            return "Not assigned";
-        return ticket.getAssignedTo().getId().toString();
     }
 
     private String checkPriority(Ticket ticket) {
         if (ticket.getPriority() == null)
             return "Not assigned";
         return ticket.getPriority().name();
+    }
+
+    private String getUserFullName(User user) {
+        if (user == null)
+            return "Not assigned";
+        return "%s %s".formatted(user.getFirstName(), user.getLastName());
     }
 }

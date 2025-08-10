@@ -65,7 +65,7 @@ public class TicketController {
             @PathVariable("ticket_id") Long ticketId,
             @RequestBody @Valid CreateCommentRequest request
     ) {
-        var createdTicket = ticketService.addComment(ticketId, request);
+        var createdTicket = ticketService.addCommentToTicket(ticketId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdTicket);
     }
 }
