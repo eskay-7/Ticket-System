@@ -24,4 +24,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByIdAndTeam(Long id, Team team);
 
     List<User> findAllByTeamIsNull();
+
+    List<User> findAllByTeamIsNotNull();
 }
