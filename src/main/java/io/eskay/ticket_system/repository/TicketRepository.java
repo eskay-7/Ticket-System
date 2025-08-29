@@ -2,6 +2,7 @@ package io.eskay.ticket_system.repository;
 
 import io.eskay.ticket_system.entity.Team;
 import io.eskay.ticket_system.entity.Ticket;
+import io.eskay.ticket_system.entity.TicketStatus;
 import io.eskay.ticket_system.entity.User;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,9 +14,9 @@ import java.util.Optional;
 
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
-        @EntityGraph(attributePaths = {"category", "raisedBy", "assignedTo"})
-        @Query(value = "select t from Ticket t where t.id = :id")
-        Optional<Ticket> findByIdWithInfo(Long id);
+  @EntityGraph(attributePaths = {"category", "raisedBy", "assignedTo"})
+  @Query(value = "select t from Ticket t where t.id = :id")
+  Optional<Ticket> findByIdWithInfo(Long id);
 
   /**
    * Finds a ticket using the provided {id} and the current authenticated user together with it's comments
@@ -46,5 +47,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
   Optional<Ticket> findByIdAndAssignedToWithComments(Long id, User user);
 
   List<Ticket> findByTeam(Team team);
+
+  List<Ticket> findByTeamAndStatusOrderByCreatedAtDesc(Team team, TicketStatus status);
   Optional<Ticket> findByIdAndTeam(Long id, Team team);
 }

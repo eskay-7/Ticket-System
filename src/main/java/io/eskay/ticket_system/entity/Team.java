@@ -1,5 +1,6 @@
 package io.eskay.ticket_system.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class Team {
     @Column(name = "name")
     private String name;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "team_lead_id")
     private User teamLead;

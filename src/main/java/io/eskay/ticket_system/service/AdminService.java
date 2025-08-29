@@ -1,9 +1,8 @@
 package io.eskay.ticket_system.service;
 
 import io.eskay.ticket_system.dto.request.CreateTeamRequest;
-import io.eskay.ticket_system.dto.response.TeamsDto;
+import io.eskay.ticket_system.dto.response.TeamDto;
 import io.eskay.ticket_system.dto.response.UserDto;
-import jakarta.validation.Valid;
 
 import java.util.List;
 
@@ -12,9 +11,9 @@ public interface AdminService {
 
     List<UserDto> getAllUsersFilteredByTeam(boolean isAgent);
 
-    List<TeamsDto> getAllTeams();
+    List<TeamDto> getAllTeams();
 
-    TeamsDto getTeam(Long teamId);
+    TeamDto getTeam(Long teamId);
 
-    TeamsDto createTeam(CreateTeamRequest request);
+    TeamDto createTeam(CreateTeamRequest request);
 }

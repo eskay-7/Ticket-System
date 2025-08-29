@@ -22,25 +22,22 @@ public class LeadAgentController {
         this.leadAgentService = leadAgentService;
     }
 
-    @GetMapping("/tickets")
-    public List<TicketDto> getAllTicketsForTeam() {
-        return leadAgentService.getTeamTickets();
-    }
 
-    @GetMapping("/tickets/{ticket_id}")
-    public ResponseEntity<TicketDto> getTicket(@PathVariable("ticket_id") Long ticketId) {
-        var ticket = leadAgentService.getTicket(ticketId);
-        return ResponseEntity.ok(ticket);
-    }
 
-    @PutMapping("/tickets/{ticket_id}/assign_to")
-    public ResponseEntity<TicketDto> assignTicketToAgent(
-            @PathVariable("ticket_id") Long ticketId,
-            @RequestParam(name = "agent_id") Long agentId
-    ) {
-        var ticket = leadAgentService.assignTicketToAgent(ticketId, agentId);
-        return ResponseEntity.ok(ticket);
-    }
+//    @GetMapping("/tickets/{ticket_id}")
+//    public ResponseEntity<TicketDto> getTicket(@PathVariable("ticket_id") Long ticketId) {
+//        var ticket = leadAgentService.getTicket(ticketId);
+//        return ResponseEntity.ok(ticket);
+//    }
+
+//    @PutMapping("/tickets/{ticket_id}/assign_to")
+//    public ResponseEntity<TicketDto> assignTicketToAgent(
+//            @PathVariable("ticket_id") Long ticketId,
+//            @RequestParam(name = "agent_id") Long agentId
+//    ) {
+//        var ticket = leadAgentService.assignTicketToAgent(ticketId, agentId);
+//        return ResponseEntity.ok(ticket);
+//    }
 
     @GetMapping("/team_members")
     public List<UserDto> getAllTeamMembers() {

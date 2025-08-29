@@ -14,6 +14,10 @@ public record CreateTicketRequest(
 
         @NotBlank(message = "description field cannot be empty")
         @Size(min = 4, message = "description must have a length of at least 4 characters")
-        String description
+        String description,
+
+        @NotBlank(message = "priority field cannot be empty")
+        @Size(min = 3, message = "priority must have a length of at least 3 characters")
+        String priority
 ) {
 }

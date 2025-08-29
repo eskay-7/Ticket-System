@@ -22,6 +22,8 @@ public record RegisterationRequest(
 
         @NotBlank(message = "password field cannot be empty")
         @Size(min = 8, max = 255, message = "password must have a length between 8 and 255 characters")
-        String password
+        String password,
+
+        long teams_id
 ) {
 }

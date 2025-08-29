@@ -2,9 +2,12 @@ package io.eskay.ticket_system.controller;
 
 import io.eskay.ticket_system.dto.request.LoginRequest;
 import io.eskay.ticket_system.dto.request.RegisterationRequest;
+import io.eskay.ticket_system.dto.request.UpdateUserInfoRequest;
 import io.eskay.ticket_system.dto.response.AuthResponse;
+import io.eskay.ticket_system.dto.response.UserDto;
 import io.eskay.ticket_system.exception.ExceptionResponse;
 import io.eskay.ticket_system.service.AuthService;
+import io.eskay.ticket_system.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -13,7 +16,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,9 +25,14 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserService userService;
 
-    public AuthController(AuthService authService) {
+    public AuthController(
+            AuthService authService,
+            UserService userService
+    ) {
         this.authService = authService;
+        this.userService = userService;
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -47,11 +54,25 @@ public class AuthController {
     })
     @PostMapping("/register")
     public ResponseEntity<?> register(
+            @RequestParam(value = "is_agent", required = false) boolean isAgent,
             @RequestBody @Valid RegisterationRequest request
     ) {
-        authService.register(request);
+        if (!isAgent)
+            authService.registerUser(request);
+        else
+            authService.registerAgent(request);
         return ResponseEntity.status(HttpStatus.CREATED).body("Success");
     }
+//    public ResponseEntity<?> register(
+//            @RequestBody @Valid RegisterationRequest request
+//    ) {
+//        if (request.teams_id() == null)
+//            authService.registerUser(request);
+//        else
+//            authService.registerAgent(request);
+//
+//        return ResponseEntity.status(HttpStatus.CREATED).body("Success");
+//    }
 
 
     @ResponseStatus(HttpStatus.OK)
@@ -104,5 +125,23 @@ public class AuthController {
         var response = authService.refreshToken(refreshToken);
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserDto> getUserInfo() {
+        var user = userService.getUserInfo();
+        return ResponseEntity.ok(user);
+    }
+
+    @PutMapping("/me")
+    public ResponseEntity<UserDto> updateUserInfo(@RequestBody @Valid UpdateUserInfoRequest request) {
+        var updatedUser = userService.updateUserInfo(request);
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    @PostMapping("/forgot_password")
+    public ResponseEntity<?> forgotPassword(@RequestBody String email) {
+        authService.generateCode(email);
+        return ResponseEntity.ok("Verification code successfully sent to email: %s".formatted(email));
     }
 }

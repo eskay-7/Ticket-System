@@ -1,7 +1,7 @@
 package io.eskay.ticket_system.controller;
 
 import io.eskay.ticket_system.dto.request.CreateTeamRequest;
-import io.eskay.ticket_system.dto.response.TeamsDto;
+import io.eskay.ticket_system.dto.response.TeamDto;
 import io.eskay.ticket_system.dto.response.UserDto;
 import io.eskay.ticket_system.service.AdminService;
 import jakarta.validation.Valid;
@@ -24,7 +24,7 @@ public class AdminController {
     }
 
     /*get all users
-    * get users without a team
+    * get users without a teams_id
     * get agents*/
 
     @GetMapping("/users")
@@ -44,18 +44,18 @@ public class AdminController {
     }
 
     @GetMapping("/teams")
-    public List<TeamsDto> getAllTeams() {
+    public List<TeamDto> getAllTeams() {
         return adminService.getAllTeams();
     }
 
     @GetMapping("/teams/{team_id}")
-    public ResponseEntity<TeamsDto> getTeam(@PathVariable(name = "team_id") Long teamId) {
+    public ResponseEntity<TeamDto> getTeam(@PathVariable(name = "team_id") Long teamId) {
         var foundTeam = adminService.getTeam(teamId);
         return ResponseEntity.ok(foundTeam);
     }
 
     @PostMapping("/teams")
-    public ResponseEntity<TeamsDto> createTeam(@RequestBody @Valid CreateTeamRequest request) {
+    public ResponseEntity<TeamDto> createTeam(@RequestBody @Valid CreateTeamRequest request) {
         var createdTeam = adminService.createTeam(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdTeam);
     }

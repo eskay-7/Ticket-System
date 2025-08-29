@@ -1,10 +1,13 @@
 package io.eskay.ticket_system.controller;
 
-import io.eskay.ticket_system.dto.request.AgentUpdateTicketRequest;
-import io.eskay.ticket_system.dto.request.CreateCommentRequest;
+import io.eskay.ticket_system.dto.request.*;
 import io.eskay.ticket_system.dto.response.CommentDto;
+import io.eskay.ticket_system.dto.response.FaqDto;
 import io.eskay.ticket_system.dto.response.TicketDto;
+import io.eskay.ticket_system.entity.Team;
 import io.eskay.ticket_system.service.AgentService;
+import io.eskay.ticket_system.service.FaqService;
+import io.eskay.ticket_system.service.FaqServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,9 +33,33 @@ public class AgentController {
     * saveTicket*/
 
     private final AgentService agentService;
+    private final FaqService faqService;
 
-    public AgentController(AgentService agentService) {
+    public AgentController(
+            AgentService agentService,
+            FaqService faqService
+    ) {
         this.agentService = agentService;
+        this.faqService = faqService;
+    }
+
+    @GetMapping("/tickets")
+    public List<TicketDto> getLatestPendingTicketsForTeam() {
+        return agentService.getLatestPendingTeamTickets();
+    }
+
+//    @GetMapping("/tickets/{ticket_id}")
+//    public ResponseEntity<TicketDto> getTicket(@PathVariable("ticket_id") Long ticketId) {
+//        var ticket = agentService.getUnAssignedTicket(ticketId);
+//        return ResponseEntity.ok(ticket);
+//    }
+
+    @PutMapping("/tickets/{ticket_id}/assign_to")
+    public ResponseEntity<?> assignTicketToAgent(
+            @PathVariable("ticket_id") Long ticketId
+    ) {
+        agentService.assignTicketToAgent(ticketId);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/assigned_tickets")
@@ -68,4 +95,40 @@ public class AgentController {
         var createdComment = agentService.addComment(ticketId, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdComment);
     }
+
+    @PostMapping("/teams")
+    public ResponseEntity<Team> createTeam(@RequestBody @Valid CreateTeamRequest request) {
+        var createdTeam = agentService.createTeam(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdTeam);
+    }
+
+    /*
+    * get faqs for team, create faq, update faq, delete faq*/
+
+    @PostMapping("/faqs")
+    public ResponseEntity<FaqDto> createFaq(@RequestBody @Valid CreateFaqRequest request) {
+        var createdFaq = faqService.createFaq(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdFaq);
+    }
+
+    @GetMapping("/faqs")
+    public List<FaqDto> getTeamFaqs() {
+        return faqService.getTeamFaqs();
+    }
+
+    @DeleteMapping("/faqs/{faq_id}")
+    public ResponseEntity<?> deleteFaq(@PathVariable("faq_id") Long faqId) {
+        faqService.deleteFaq(faqId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PutMapping("/faqs/{faq_id}")
+    public ResponseEntity<FaqDto> updateFaq(
+            @PathVariable("faq_id") Long faqId,
+            @RequestBody @Valid UpdateFaqRequest request
+    ) {
+        var updatedFaq = faqService.updateFaq(faqId, request);
+        return ResponseEntity.ok(updatedFaq);
+    }
+
 }

@@ -5,7 +5,14 @@ import io.eskay.ticket_system.dto.request.CreateTicketRequest;
 import io.eskay.ticket_system.dto.request.UpdateTicketRequest;
 import io.eskay.ticket_system.dto.response.CommentDto;
 import io.eskay.ticket_system.dto.response.TicketDto;
+import io.eskay.ticket_system.exception.ExceptionResponse;
 import io.eskay.ticket_system.service.TicketService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +30,9 @@ public class TicketController {
         this.ticketService = ticketService;
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @Operation(summary = "Fetches all tickets",
+            description = "Returns all tickets created by current authenticated user")
     @GetMapping
     public List<TicketDto> getUserTickets() {
         return ticketService.getUserTickets();

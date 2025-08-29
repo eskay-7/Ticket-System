@@ -1,5 +1,6 @@
 package io.eskay.ticket_system.exception;
 
+import jakarta.servlet.ServletException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -28,6 +29,18 @@ public class GlobalExceptionHandling {
         );
 
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    @ExceptionHandler(ServletException.class)
+    public ResponseEntity<ExceptionResponse> handleException (ServletException e) {
+        var error = new ExceptionResponse(
+                HttpStatusCode.valueOf(400).value(),
+                HttpStatus.BAD_REQUEST,
+                e.getMessage(),
+                Timestamp.valueOf(LocalDateTime.now())
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
 
     @ExceptionHandler(ForbiddenOperationException.class)

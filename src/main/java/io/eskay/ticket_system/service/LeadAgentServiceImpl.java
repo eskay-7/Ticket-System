@@ -61,7 +61,7 @@ public class LeadAgentServiceImpl implements LeadAgentService {
 
         var ticket = ticketRepository.findByIdAndTeam(id, team)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Error, ticket with id '%d' does not belong to this team, check and try again"
+                        "Error, ticket with id '%d' does not belong to this teams_id, check and try again"
                                 .formatted(id)));
         return ticketDtoMapper.apply(ticket);
     }
@@ -79,18 +79,18 @@ public class LeadAgentServiceImpl implements LeadAgentService {
     @Override
     @Transactional
     public TicketDto assignTicketToAgent(Long ticketId, Long agentId) {
-        /*find the ticket by id and the team
-         * find the supposed agent by the id and team then check if agent */
+        /*find the ticket by id and the teams_id
+         * find the supposed agent by the id and teams_id then check if agent */
         var team = getTeamByLead();
 
         var ticket = ticketRepository.findByIdAndTeam(ticketId, team)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Error, ticket with id '%d' does not belong to this team, check and try again"
+                        "Error, ticket with id '%d' does not belong to this teams_id, check and try again"
                                 .formatted(ticketId)));
 
         var agent = userRepository.findByIdAndTeam(agentId, team)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Error, agent with id '%d' not found or does not belong to this team, check and try again"
+                        "Error, agent with id '%d' not found or does not belong to this teams_id, check and try again"
                                 .formatted(agentId)));
 
 //        ticket.setAssignedTo(agent);
@@ -145,7 +145,7 @@ public class LeadAgentServiceImpl implements LeadAgentService {
 
         var agent = userRepository.findByIdAndTeam(agentId, team)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Error, agent with id '%d' not found or does not belong to this team, check and try again"
+                        "Error, agent with id '%d' not found or does not belong to this teams_id, check and try again"
                                 .formatted(agentId)));
         agent.setTeam(null);
         agent.removeRole(Role.AGENT);
@@ -155,6 +155,6 @@ public class LeadAgentServiceImpl implements LeadAgentService {
     private Team getTeamByLead() {
         return teamRepository.findByTeamLead(AuthenticatedUser.get())
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "Error, no team found where current authenticated user is a Team Lead"));
+                        "Error, no teams_id found where current authenticated user is a Team Lead"));
     }
 }

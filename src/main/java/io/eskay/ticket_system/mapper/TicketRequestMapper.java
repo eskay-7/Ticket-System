@@ -2,6 +2,7 @@ package io.eskay.ticket_system.mapper;
 
 import io.eskay.ticket_system.dto.request.CreateTicketRequest;
 import io.eskay.ticket_system.entity.Ticket;
+import io.eskay.ticket_system.entity.TicketPriority;
 import io.eskay.ticket_system.entity.TicketStatus;
 import io.eskay.ticket_system.util.AuthenticatedUser;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ public class TicketRequestMapper implements Function<CreateTicketRequest, Ticket
                 .title(request.title())
                 .description(request.description())
                 .status(TicketStatus.PENDING)
+                 .priority(TicketPriority.valueOf(request.priority().toUpperCase()))
                 .raisedBy(AuthenticatedUser.get())
                 .build();
     }

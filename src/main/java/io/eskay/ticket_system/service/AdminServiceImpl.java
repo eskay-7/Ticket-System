@@ -1,7 +1,7 @@
 package io.eskay.ticket_system.service;
 
 import io.eskay.ticket_system.dto.request.CreateTeamRequest;
-import io.eskay.ticket_system.dto.response.TeamsDto;
+import io.eskay.ticket_system.dto.response.TeamDto;
 import io.eskay.ticket_system.dto.response.UserDto;
 import io.eskay.ticket_system.entity.Team;
 import io.eskay.ticket_system.entity.User;
@@ -57,7 +57,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public List<TeamsDto> getAllTeams() {
+    public List<TeamDto> getAllTeams() {
         return teamRepository.findAll()
                 .stream()
                 .map(teamDtoMapper)
@@ -65,15 +65,15 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public TeamsDto getTeam(Long teamId) {
+    public TeamDto getTeam(Long teamId) {
         return teamRepository.findById(teamId)
                 .map(teamDtoMapper)
-                .orElseThrow(() -> new ResourceNotFoundException("Error, team with id '%d' not found, check and try again"
+                .orElseThrow(() -> new ResourceNotFoundException("Error, teams_id with id '%d' not found, check and try again"
                         .formatted(teamId)));
     }
 
     @Override
-    public TeamsDto createTeam(CreateTeamRequest request) {
+    public TeamDto createTeam(CreateTeamRequest request) {
         var user = userRepository.findByIdWithTeam(request.teamLead())
                 .orElseThrow(() -> new ResourceNotFoundException("Error, user with id '%d' not found, check and try again"
                         .formatted(request.teamLead())));
@@ -89,7 +89,7 @@ public class AdminServiceImpl implements AdminService {
     private void checkIfUserIsAlreadyTeamLead(CreateTeamRequest request, User user) {
         var tempTeam = teamRepository.findByTeamLead(user);
         if (tempTeam.isPresent())
-            throw new ForbiddenOperationException("Forbidden, user with id '%d' is already a team lead for another team"
+            throw new ForbiddenOperationException("Forbidden, user with id '%d' is already a teams_id lead for another teams_id"
                     .formatted(request.teamLead()));
     }
 }

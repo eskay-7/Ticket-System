@@ -1,5 +1,6 @@
 package io.eskay.ticket_system.service;
 
+import io.eskay.ticket_system.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -66,6 +67,7 @@ public class JwtService {
                 .stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList());
+//        claims.put("team_id",((User) user).getTeam().getId());
 
         return Jwts
                 .builder()
@@ -81,4 +83,8 @@ public class JwtService {
         byte[] keyBytes = Decoders.BASE64URL.decode(JWT_SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
+
+//    public Long extractUserTeamId(String jwtToken) {
+//        return (Long) extractAllClaims(jwtToken).get("team_id");
+//    }
 }
